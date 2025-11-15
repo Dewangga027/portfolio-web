@@ -15,16 +15,16 @@ import { useState } from "react";
 export default function Home() {
   const navItems = [
     {
-      name: "Features",
-      link: "#features",
+      name: "About",
+      link: "#about",
     },
     {
-      name: "Pricing",
-      link: "#pricing",
+      name: "Projects",
+      link: "#projects",
     },
     {
-      name: "Contact",
-      link: "#contact",
+      name: "Experience",
+      link: "#experience",
     },
   ];
 
@@ -86,25 +86,29 @@ export default function Home() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-      <DummyContent />
-
+      <Content />
       {/* Navbar */}
     </div>
   );
 }
 
-const DummyContent = () => {
+const Content = () => {
   return (
-    <div className="container mx-auto p-8 pt-24">
-      <h1 className="mb-4 text-center text-3xl font-bold">
-        Check the navbar at the top of the container
+    <div className="container mx-auto p-24 pt-10">
+      <div className="px-24 text-center mb-5">
+      <h1 className="mb-4 font-bold tracking-tight text-balance text-zinc-900 dark:text-zinc-50 md:text-4xl lg:text-5xl">
+        Building Intelligent IoT & Embedded Systems
+        <span className="block text-sky-500 mt-2">
+          for Real-World Industry.
+        </span>
       </h1>
-      <p className="mb-10 text-center text-sm text-zinc-500">
-        For demo purpose we have kept the position as{" "}
-        <span className="font-medium">Sticky</span>. Keep in mind that this
-        component is <span className="font-medium">fixed</span> and will not
-        move when scrolling.
+      <p className="mt-6 text-lg font-medium text-pretty text-neutral-400 sm:text-xl/8">
+        I&apos;m <span className="font-semibold">Dewangga</span>, an Electronics & IoT Engineer
+        focused on embedded systems, industrial monitoring, and autonomous drones.
+        I design and build end-to-end solutions from sensor nodes to dashboards and
+        control algorithms.
       </p>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         {[
           {
