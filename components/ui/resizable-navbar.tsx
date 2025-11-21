@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Flash } from "../icons/flash";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import { DarkModeSwitch } from 'react-toggle-dark-mode';
 import {
   motion,
   AnimatePresence,
@@ -9,8 +10,8 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 
-import React, { useRef, useState } from "react";
-
+import { useTheme } from "next-themes";
+import React, { useEffect, useRef, useState } from "react";
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -69,7 +70,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   return (
     <motion.div
       ref={ref}
-      className={cn("sticky top-1 inset-x-0 px-24 z-0 w-full", className)}
+      className={cn("sticky top-1 inset-x-0 px-24 z-10 w-full", className)}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
@@ -102,7 +103,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       }}
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-screen flex-row items-center justify-between self-start rounded-full bg-transparent lg:flex dark:bg-transparent",
-        visible && "bg-white/80 dark:bg-neutral-950/15 border-1 border-neutral-200 dark:border-neutral-700",
+        visible && "bg-background/10 border-1 border-black/10 dark:border-white/15",
         className,
       )}
     >
@@ -118,7 +119,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-md font-medium text-white transition duration-200 hover:text-white/25 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-md font-medium transition duration-200 lg:flex lg:space-x-2",
         className,
       )}
     >
@@ -126,14 +127,14 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-white dark:text-white"
+          className="relative px-4 py-2"
           key={`link-${idx}`}
           href={item.link}
         >
           {hovered === idx && (
             <motion.div
               layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-white dark:bg-white/25"
+              className="absolute inset-0 h-full w-full rounded-full bg-primary"
             />
           )}
           <span className="relative z-20">{item.name}</span>
@@ -219,9 +220,9 @@ export const MobileNavToggle = ({
   onClick: () => void;
 }) => {
   return isOpen ? (
-    <IconX className="text-black dark:text-white" onClick={onClick} />
+    <IconX className="text-black dark:text-zinc-50" onClick={onClick} />
   ) : (
-    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
+    <IconMenu2 className="text-black dark:text-zinc-50" onClick={onClick} />
   );
 };
 
@@ -229,12 +230,12 @@ export const NavbarLogo = () => {
   return (
     <a
       href="#"
-      className="relative z-20 mr-4 flex items-center space-x-3 px-2 py-1 text-sm font-normal text-black"
+      className="relative z-20 mr-4 flex items-center space-x-3 px-2 py-1 text-md font-medium"
     >
-      <div className="inline-flex items-center justify-center rounded-lg bg-white p-2">
-        <Flash className="w-4 h-4 text-black dark:text-black" />
+      <div className="inline-flex items-center justify-center rounded-lg bg-primary p-2">
+        <Flash className="w-4 h-4 text-white" />
       </div>
-      <span className="text-md text-black dark:text-white">Engineer</span>
+      <span>Engineer</span>
     </a>
   );
 };
@@ -257,15 +258,15 @@ export const NavbarButton = ({
     | React.ComponentPropsWithoutRef<"button">
   )) => {
   const baseStyles =
-    "px-4 py-2 rounded-full bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-full bg-zinc-50 button bg-zinc-50 text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
   const variantStyles = {
     primary:
-      "shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
-    secondary: "bg-transparent shadow-none dark:text-white",
-    dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
+      "bg-primary text-zinc-50",
+    secondary: "bg-transparent shadow-none dark:text-zinc-50",
+    dark: "bg-black text-zinc-50 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
     gradient:
-      "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
+      "bg-gradient-to-b from-blue-500 to-blue-700 text-zinc-50 shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
   };
 
   return (
@@ -276,5 +277,33 @@ export const NavbarButton = ({
     >
       {children}
     </Tag>
+  );
+};
+
+export const NavbarDarkModeToggle = () => {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(id);
+  }, []);
+
+  if (!mounted) return null;
+
+  const isDark = resolvedTheme === "dark";
+
+  return (
+    <button
+      type="button"
+      className="flex items-center justify-center p-2 transition hover:-translate-y-0.5"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+    >
+      <DarkModeSwitch
+        checked={isDark}
+        onChange={(checked) => setTheme(checked ? "dark" : "light")}
+        size={20}
+      />
+    </button>
   );
 };
